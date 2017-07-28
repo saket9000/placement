@@ -1,0 +1,52 @@
+<!doctype html>
+<html> 
+    <head>
+        <link rel="stylesheet" href="/static/css/addStudent.css" />
+        <title>Placement Portal</title>
+    </head>
+    
+    <body> 
+        <div><p id="head">Add Student</p></div>
+        <p> Enter Details of Student </p>
+        <form action="/add-student" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            <input placeholder="Name" type="text" name="sname">
+            <input placeholder="Roll Number" type="text" name="rno">
+            <input placeholder="DOB" type="date" name="dob">
+
+            <select name="blood_group_picker">
+                <option value="">Please select</option>
+                {% for i in blood_groups %}
+                    <option value="{{ i.0 }}">{{ i.1 }}</option>
+                {% endfor %}
+            </select>
+
+
+            <input placeholder="phone" type="text" name="phone">
+            <input placeholder="Current address" type="text" name="curradd">
+            <input placeholder="Permanent address" type="text" name="permadd">
+            <input type="checkbox" value="yes" name="address_flag">Same as current address</input>
+            <input type="file" accept="image/*" name="profile-img">
+            <input placeholder="Guardian's Name" type="text" name="gname">
+            
+            <select name="course_picker">
+            {% for key,value in all_courses.items %}
+                <option value="{{ key }}">{{ value }}</option>
+            {% endfor %}
+            </select>
+
+            <input placeholder="batch" type="text" name="batch">
+            <select name="guardian_type_picker">
+                {% for key in guardian_types %}
+                    <option value="{{key.0}}">{{key.1}}</option>
+                {% endfor %}
+            </select>
+
+
+            <!-- <input placeholder="Guardian type" type="text" name="gtype"> -->
+            <input placeholder="Guardian phone" type="text" name="gphone">
+            <input placeholder="email" type="text" name="email">
+            <input type="submit">
+            </form>
+    </body>
+</html>
