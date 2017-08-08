@@ -25,7 +25,8 @@
     <link href="/static/scss/starrr.css" rel="stylesheet">
     <!-- bootstrap-daterangepicker -->
     <link href="/static/scss/daterangepicker.css" rel="stylesheet">
-
+    <!-- bootstrap-datetimepicker -->
+    <link href="/static/scss/bootstrap-datetimepicker.css" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="/static/scss/custom.min.css" rel="stylesheet">
   </head>
@@ -36,7 +37,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="/home" class="site_title"><i class="fa fa-home"></i> <span>Placement Portal</span></a>
+              <a href="index.html" class="site_title"><i class="fa fa-home"></i> <span>Placement Portal</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -128,7 +129,7 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>CHANGE PASSWORD</h3>
+                <h3>ADD CAMPUS DRIVE</h3>
               </div>
 
               <div class="title_right">
@@ -136,7 +137,7 @@
                   <div class="input-group">
                     <!-- <input type="text" class="form-control" placeholder="Search for..."> -->
                     <!-- <span class="input-group-btn"> -->
-                      <!-- <button class="btn btn-default" type="button">Go!</button> -->
+                      <!-- <button class="btn btn-d026+efault" type="button">Go!</button> -->
                     </span>
                   </div>
                 </div>
@@ -147,7 +148,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <!-- <h2>Enter Details of the Company</h2> -->
+                    <h2>Enter Details of the Company</h2>
                     <ul class="nav navbar-right panel_toolbox">
 <!--                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
  -->                      </li>
@@ -161,36 +162,61 @@
                   </div>
                   <div class="x_content">
                     <br />
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="/cpassword" method="POST" enctype="multipart/form-data">
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" action="/add-drive/" method="POST" enctype="multipart/form-data">
                       {% csrf_token %}
-                      
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >Enter New Password<span class="required">*</span>
+                      <!-- <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" name="password1" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div> -->
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Company<span class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select class="form-control" name="company_picker" data-show-subtext="true" data-live-search>
+                            <option>Choose option</option>
+                            {% for key,value in all_companies.items %}
+                            <option value="{{ key }}"> {{ value }} </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Drive Year<span class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input  class="form-control col-md-7 col-xs-12" type="text" name="driveyear">
                         </div>
                       </div>
 
-                      <p style="text-indent: 20em;">
-                      Your password can't be too similar to your other personal information.<br></p>
-                      <p style="text-indent: 20em;">
-                      Your password must contain at least 8 characters.<br></p>
-                      <p style="text-indent: 20em;">
-                      Your password can't be a commonly used password.<br></p>
-                      <p style="text-indent: 20em;">
-                      Your password can't be entirely numeric.<br></p>
-
-
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Re-Enter New password<span class="required">*</span>
-                        </label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Package (In Lacs)<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input class="form-control col-md-7 col-xs-12" type="password" name="password2" required="required">
+                          <input  class="form-control col-md-7 col-xs-12" type="text" required="required" name="package">
                         </div>
                       </div>
 
-                      
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Bond Period (In years)<span class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input  class="form-control col-md-7 col-xs-12" type="text" required="required" name="bond">
+                        </div>
+                      </div>
+
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Of Drive<span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12"><div class='input-group date' id='myDatepicker'>
+                          <input type='text' class="form-control" name="dateofdrive" />
+                            <span class="input-group-addon">
+                               <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                        </div>
+                      </div>
+
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -262,6 +288,18 @@
     <script src="/static/sjs/starrr.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="/static/sjs/custom.min.js"></script>
+    <!-- bootstrap-datetimepicker -->    
+    <script src="/static/sjs/bootstrap-datetimepicker.min.js"></script>
+<script>
+    
+    $('#myDatepicker2').datetimepicker({
+        format: 'YYYY-MM-DD'
+    });
+
+    $('#myDatepicker').datetimepicker({
+        format: 'YYYY-MM-DD'
+    });
+</script>
   
   </body>
 </html>

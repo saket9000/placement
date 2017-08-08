@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title_block %}Test Search{% endblock %}
+{% block main_block %}
+
+    <form>
+        <input type="text" name="search_param" action="/test-search" method="GET" enctype="multipart/form-data">
+    </form>
+    <table class="table table-striped table-bordered col-lg-12 col-md-12 col-sm-12">
+        <thead>
+            <tr>
+                <th>Roll No.</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                <tr>
+                    <td>{{ row.roll_no }}</td>
+                    <td>{{ row.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

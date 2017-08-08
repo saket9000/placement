@@ -19,46 +19,24 @@
     <link href="/static/scss/green.css" rel="stylesheet">
   
     <!-- bootstrap-progressbar -->
-    <!-- <link href="/static/scss/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet"> -->
+    <link href="/static/scss/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
     <!-- <link href="/static/scss/jqvmap.min.css" rel="stylesheet"/> -->
 
-    <!-- <link href="/static/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet"> -->
-    <!-- <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet"> -->
+    <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
     <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
     <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css" rel="stylesheet">
-
-
-    <!-- bootstrap-daterangepicker -->
-    <!-- <link href="/static/scss/daterangepicker.css" rel="stylesheet"> -->
 
     <!-- Custom Theme Style -->
     <link href="/static/scss/custom.min.css" rel="stylesheet">
 
     <!-- <link href="/static/scss/prettify.min.css" rel="stylesheet"> -->
-    <!-- Select2 -->
-    <!-- <link href="/static/scss/select2.min.css" rel="stylesheet"> -->
-    <!-- Switchery -->
-    <!-- <link href="/static/scss/switchery.min.css" rel="stylesheet"> -->
-    <!-- starrr -->
-    <!-- <link href="/static/scss/starrr.css" rel="stylesheet"> -->
-
-                <!-- <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"> -->
-
-        <!-- <link rel="stylesheet" type="text/css" href="/static/css/dataTables.bootstrap.min.css"> -->
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
-        <script src="https:// cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-        <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
-        <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+    
+    <link href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 
   </head>
 
@@ -114,7 +92,7 @@
                       <li><a href="index.html">Delete Placement</a></li> -->
                     </ul>
                   </li>
-                  <!-- <li><a><i class="fa fa-line-chart"></i> Data Insights <span class="fa fa-chevron-down"></span></a>
+                 <!--  <li><a><i class="fa fa-line-chart"></i> Data Insights <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="/test-search">Test Search</a></li>
                       <li><a href="/">Table Dynamic</a></li>
@@ -158,26 +136,16 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-          <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>View Students</h3>
+                <h3>VIEW CAMPUS DRIVES</h3>
               </div>
-
-              
-                      
-
-
-                    <div id="pagination-div">
-                     {% include "companytable.html" %}
-                    </div>
-
-
-
-
-                  </div>
-                </div>
+            </div>     
+              <div id="pagination-div">
+                {% include "drivetable.html" %}
               </div>
+         </div>
+
         <!-- /page content -->
 
         <!-- footer content -->
@@ -188,9 +156,6 @@
           <div class="clearfix"></div>
         </footer>
         <!-- /footer content -->
-      </div>
-    </div>
-
     <!-- jQuery -->
     <script src="/static/sjs/jquery.min.js"></script>
     <!-- Bootstrap -->
@@ -202,6 +167,7 @@
     
     <!-- Custom Theme Scripts -->
     <script src="/static/sjs/custom.min.js"></script>
+    
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
@@ -214,6 +180,9 @@
     <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.colVis.min.js"></script>
-    
+
+
+
+
   </body>
 </html>

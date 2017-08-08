@@ -27,7 +27,7 @@ class StudentAdmin(DeleteNotAllowedAdmin):
         "email", "course", "soft_delete"
     ]
     list_filter = [
-        "course", "batch",
+        "course", "batch", "soft_delete"
     ]
 
 
@@ -36,7 +36,7 @@ class CourseAdmin(DeleteNotAllowedAdmin):
         "name", "abbr", "duration", "soft_delete",
     ]
     list_filter = [
-        "duration",
+        "duration", "soft_delete"
     ]
 
 
@@ -48,8 +48,18 @@ class CompanyAdmin(DeleteNotAllowedAdmin):
 
 class PlacementsAdmin(DeleteNotAllowedAdmin):
     list_display = [
-        "student", "company", "package",
-        "bond_period", "soft_delete",
+        "student", "campus_drive", "soft_delete",
+    ]
+    list_filter = [
+        "campus_drive", "soft_delete"
+    ]
+
+class CampusDriveAdmin(DeleteNotAllowedAdmin):
+    list_display = [
+        "company", "drive_year", "package","soft_delete",
+    ]
+    list_filter = [
+        "company", "drive_year", "soft_delete"
     ]
 
 
@@ -61,7 +71,7 @@ class HistoryAdmin(DeleteNotAllowedAdmin):
         "user", "activity_type"
     ]
     readonly_fields = [
-        'user', 'activity', 'activity_type'
+        "user", "activity", "activity_type", "soft_delete"
     ]
 
     def has_add_permission(self, request):
@@ -82,6 +92,10 @@ class PasswordResetAdmin(DeleteNotAllowedAdmin):
     list_filter = [
         "password_request_created_at", "token_consumed"
     ]
+    readonly_fields = [
+        "user", "password_request_created_at", "token",
+        "token_consumed", "soft_delete",
+    ]
 
     def has_add_permission(self, request):
         return False
@@ -95,6 +109,7 @@ admin.site.register(Student, StudentAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Placements, PlacementsAdmin)
+admin.site.register(CampusDrive, CampusDriveAdmin)
 admin.site.register(History, HistoryAdmin)
 admin.site.register(PasswordReset, PasswordResetAdmin)
 admin.site.disable_action("delete_selected")

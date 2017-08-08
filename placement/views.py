@@ -42,6 +42,11 @@ import random
 
 
 def handler404(request):
+
+    """
+    404 page handler.
+    """
+
     response = render_to_response('404.html', {}, 
         context_instance=RequestContext(request))
     response.status_code = 404
@@ -49,6 +54,11 @@ def handler404(request):
 
 
 def handler500(request):
+
+    """
+    500 error handler.
+    """
+
     response = render_to_response('500.html', {}, 
         context_instance=RequestContext(request))
     response.status_code = 500
@@ -206,6 +216,15 @@ def password_resetenter(request, uidb64=None, token=None):
         reset_token = models.PasswordReset.objects.get(
             token=token, user=user
         )
+        token_check = models.PasswordReset.objects.filter(
+            user=user, soft_delete=False, token_consumed=False,
+        ).exclude(token=token).first()
+        update_fields = []
+        token_check.token_consumed = True
+        update_fields.append('token_consumed')
+        token_check.soft_delete = True
+        update_fields.append('soft_delete')
+        token_check.save(update_fields=update_fields)
         time_threshold = timezone.now() - reset_token.password_request_created_at
         if time_threshold > timedelta(minutes=30):
             try:
@@ -278,9 +297,9 @@ def add_student(request):
         gtype = request.POST.get('guardian_type_picker')
         gphone = request.POST.get('gphone')
         email = request.POST.get('email')
-        address_flag = request.POST.get('address_flag', '')
-        address_flag = True if address_flag.lower() == 'yes' else False
-        if address_flag:
+        address_flag = request.POST.get('address_flag')
+        address_flag = True if address_flag == 'on' else False
+        if address_flag == True:
             permadd = curradd
         try:
             student = models.Student(
@@ -305,7 +324,7 @@ def add_student(request):
             student.save()
             history = models.History(
                 user=emp,
-                activity="",
+                activity='Added roll number' + str(roll) +'.\n',
                 activity_type="add student"
             )
             history.save()
@@ -348,7 +367,7 @@ def add_company(request):
             company.save()
             history = models.History(
                 user=emp,
-                activity="",
+                activity='Added Company' + str(cname) + '.\n',
                 activity_type="add company"
             )
             history.save()
@@ -404,9 +423,10 @@ def edit_student(request, student_id):
         gtype = request.POST.get('guardian_type_picker')
         gphone = request.POST.get('gphone')
         email = request.POST.get('email')
-        address_flag = request.POST.get('address_flag', '')
-        address_flag = True if address_flag.lower() == 'yes' else False
-        if address_flag:
+        address_flag = request.POST.get('address_flag')
+        print (address_flag)
+        address_flag = True if address_flag == 'on' else False
+        if address_flag == True:
             permadd = curradd
         try:
             if "profile-img" in request.FILES:
@@ -421,7 +441,7 @@ def edit_student(request, student_id):
                 student.roll_no = roll
                 update_fields.append('roll_no')
                 activity += 'Changed roll number to '+ str(roll) +'.\n'
-            if student.dob !=dob:
+            if str(student.dob) != str(dob):
                 student.dob = dob
                 update_fields.append('dob')
                 activity += 'Changed DOB to ' + str(dob) + '.\n'
@@ -472,7 +492,11 @@ def edit_student(request, student_id):
             if student.email != email:
                 student.email = email
                 update_fields.append('email')
-                activity += 'Changed email email to ' + str(email) + '.\n'
+                activity += 'Changed email to ' + str(email) + '.\n'
+            if student.address_flag != address_flag:
+                student.address_flag = address_flag
+                update_fields.append('address_flag')
+                activity += 'Changed address flag.'
             student.save(update_fields=update_fields)
             history = models.History(
                 user=emp,
@@ -487,6 +511,8 @@ def edit_student(request, student_id):
             context_dict["success"] = False
             print(e)
     context_dict.update(context_helper.get_student_info(student))
+    if type(context_dict['dob']) == str:
+        context_dict['dob'] = datetime.strptime(context_dict['dob'], '%Y-%m-%d')
     for i in context_dict['course']:
         try: del context_dict['all_courses'][i]
         except: pass
@@ -499,6 +525,8 @@ def edit_student(request, student_id):
     for i in context_dict['gender_type']:
         try: context_dict['gender_types'].remove(i)
         except: pass
+    if context_dict.get('success', False):
+        return HttpResponseRedirect('/view-students')
     return render(
         request, "EditStudent.html", context_dict
     )
@@ -565,6 +593,8 @@ def edit_company(request, company_id):
             context_dict["success"] = False
             print(e)
     context_dict.update(context_helper.get_company_info(company))
+    if context_dict.get('success', False):
+        return HttpResponseRedirect('/view-companies')
     return render(
         request, "EditCompany.html", context_dict
     )
@@ -744,7 +774,7 @@ def delete_placement(request, placements_id):
     if not placement:
         raise Http404
     placement.soft_delete = True
-    activity += 'Deleted placement' + str(placement) + '.\n'
+    activity = 'Deleted placement' + str(placement) + '.\n'
     placement.save(update_fields=['soft_delete'])
     history = models.History(
                 user=emp,
@@ -836,10 +866,188 @@ def edit_placement(request, placements_id):
     for i in context_dict['company']:
         try: del context_dict['all_companies'][i]
         except: pass
-
+    if context_dict.get('success', False):
+        return HttpResponseRedirect('/view-placements')
     return render(
         request, "editPlacement.html", context_dict
     )
+
+
+@login_required
+def add_campus_drive(request):
+
+    """
+    Method to add the campus drive of company year wise.
+    """
+
+    context_dict = {}
+    emp = models.Employee.objects.get(user=request.user)
+    if not emp.placement_permit:
+        raise Http404
+    context_dict = {
+        "all_companies": context_helper.company_select()
+    }
+    if request.method == 'POST':
+        company = request.POST.get('company_picker')
+        drive_year = request.POST.get('driveyear')
+        package = request.POST.get('package')
+        bond_period = request.POST.get('bond')
+        dateofdrive = request.POST.get('dateofdrive')
+        try:
+            drive = models.CampusDrive(
+                company = models.Company.objects.get(pk=company),
+                drive_year = drive_year,
+                bond_period = bond_period,
+                package = package,
+                dateofdrive = dateofdrive,
+            )
+            drive.save()
+            history = models.History(
+                user=emp,
+                activity="added drive of" + str(company) + 
+                    "for the year" + str(drive_year) + ".\n",
+                activity_type="add campus drive."
+            )
+            history.save()
+            context_dict["message"] = 'Successfully added new Campus Drive.'
+            context_dict["success"] = True
+        except Exception as e:
+            context_dict["message"] = str(e)
+            context_dict["success"] = False
+            print(e)
+    return render(request, "AddCampusDrive.html", context_dict)
+
+
+@login_required
+def edit_campus_drive(request, campusdrive_id):
+
+    """
+    Method to edit the campus drive of company year wise.
+    """
+
+    context_dict = {}
+    emp = models.Employee.objects.get(user=request.user)
+    if not emp.placement_permit:
+        raise Http404
+    drive = models.CampusDrive.objects.filter(
+        pk=campusdrive_id, soft_delete=False
+    ).first()
+    if not drive:
+        raise Http404
+    context_dict = {
+        'campusdrive_id': campusdrive_id,
+        "all_companies": context_helper.company_select()
+    }
+    if request.method == 'POST':
+        update_fields = []
+        activity = ''
+        company = request.POST.get('company_picker')
+        drive_year = request.POST.get('driveyear')
+        package = request.POST.get('package')
+        bond_period = request.POST.get('bond')
+        dateofdrive = request.POST.get('dateofdrive')
+        try:
+            if str(drive.company.pk) != str(company):
+                try:
+                    old_company = drive.company
+                    drive.company = models.Company.objects.get(pk=company)
+                    drive.save()
+                except Exception as e:
+                    drive.soft_delete = True
+                    drive.company = old_company
+                    drive.save()
+                    drive = models.CampusDrive.objects.filter(
+                        soft_delete=True, drive_year=drive.drive_year,
+                        package=drive.package, bond_period=drive.bond_period, 
+                        company__pk=company
+                    ).first()
+                    drive.soft_delete = False
+                    drive.company = models.Company.objects.get(pk=company)
+                    drive.save(update_fields=['soft_delete', 'company'])
+                update_fields.append('company')
+                activity += 'Changed company to ' + str(company) + '.\n'
+            if drive.package != package:
+                drive.package = package
+                update_fields.append('package')
+                activity += 'Changed name to '+ str(package) +'.\n'
+            if drive.drive_year != drive_year:
+                drive.drive_year = drive_year
+                update_fields.append('drive_year')
+                activity += 'Changed drive year to' + str(drive_year) + '.\n'
+            if drive.bond_period != bond_period:
+                drive.bond_period = bond_period
+                update_fields.append('bond_period')
+                activity += 'Changed bond period to' + str(bond_period) + '.\n'
+            if drive.dateofdrive != dateofdrive:
+                drive.dateofdrive = dateofdrive
+                update_fields.append('dateofdrive')
+                activity += 'Changed date of drive to' + str(dateofdrive) + '.\n'
+            drive.save(update_fields=update_fields)
+            history = models.History(
+                user=emp,
+                activity=activity,
+                activity_type='Edit campus Drive'
+            )
+            history.save()
+            context_dict["message"] = 'Successfully Edited Campus Drive.'
+            context_dict["success"] = True
+        except Exception as e:
+            context_dict["message"] = str(e)
+            context_dict["success"] = False
+            print(e)
+    context_dict.update(context_helper.get_drive_info(drive))
+    for i in context_dict['company']:
+        try: del context_dict['all_companies'][i]
+        except: pass
+    if context_dict.get('success', False):
+        return HttpResponseRedirect('/view-drives')
+    return render(
+        request, "EditCampusDrive.html", context_dict
+    )
+
+
+@login_required
+def view_campus_drive(request):
+
+    """
+    to view the details of all students placed in the tabular form.
+    """
+
+    context_dict = {
+        'title': 'All Campus Drives'
+    }
+    return render(
+        request,
+        'ViewCampusDrive.html',
+        context_dict
+    )
+
+
+@login_required
+def delete_campus_drive(request, campusdrive_id):
+
+    """
+    view to delete placement by taking placement id as argument.
+    """
+
+    emp = models.Employee.objects.get(user=request.user)
+    if not emp.placement_permit:
+        raise Http404
+    drive = models.CampusDrive.objects.filter(
+        pk=campusdrive_id, soft_delete=False
+    ).first()
+    if not drive:
+        raise Http404
+    drive.soft_delete = True
+    activity = 'Deleted Campus Drive' + str(drive) + '.\n'
+    drive.save(update_fields=['soft_delete'])
+    history = models.History(
+                user=emp,
+                activity=activity,
+                activity_type="Deleted Campus Drive"
+            )
+    history.save()
+    return HttpResponseRedirect('/view-drives')
 
 
 def _search_result(request):
@@ -936,3 +1144,14 @@ def pie_chart(request):
         'dataset': dataset
     }
     return render(request, "pcharts.html", context_dict)
+
+
+def test_search(request):
+    context_dict = {}
+    param = request.GET.get('search_param')
+    if param:
+        results = models.Student.objects.filter(
+            Q(roll_no__icontains=param)|Q(name__icontains=param)
+        )[:20]
+        context_dict['rows'] = results
+    return render(request, 'test_search.html', context_dict)

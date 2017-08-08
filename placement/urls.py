@@ -5,10 +5,9 @@ from django.contrib.auth.decorators import login_required
 from placement import student_datatables_views
 from placement import Company_Datatables_Views
 from placement import Placement_Datatables_Views
+from placement import drive_datatables_views
 
 urlpatterns = [
-    # url(r'^admin/', include(admin.site.urls)),
-
     url(r'^$', views.index, name='index'),
     url(r'^login$', views.login_view, name = 'login_view'),
     url(r'^accounts/login', views.login_view, name = 'login_view'),
@@ -39,5 +38,11 @@ urlpatterns = [
     url(r'^password_reset/$', views.password_reset, name='password_reset'),
     url(r'^reset-password/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)$', views.password_resetenter, 
         name='password_resetenter'),
-
+    url(r'^test-search/$', views.test_search, name='test_search'),
+    url(r'^add-drive/$', views.add_campus_drive, name='add-drive'),
+    url(r'^edit-drive/(?P<campusdrive_id>[0-9]+)$', views.edit_campus_drive, name='edit-drive'),
+    url(r'^view-drives/$', views.view_campus_drive, name='view-drive'),
+    url(r'^view-drive-dt/$', login_required(drive_datatables_views.DriveListDatatable.as_view()), 
+        name='view-drive-dt'),
+    url(r'^delete-drive/(?P<campusdrive_id>[0-9]+)$', views.delete_campus_drive, name='delete-drive'),
 ]

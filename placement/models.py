@@ -136,27 +136,43 @@ class Company(TimeStampModel):
         return unicode(self.name + '-' + str(self.contact_person))
 
 
+class CampusDrive(TimeStampModel):
+
+    """
+    Campus drive details of every company year by year.
+    """
+
+    company = models.ForeignKey(Company, db_index=True)
+    drive_year = models.IntegerField()
+    package = models.CharField(max_length=10, db_index=True)
+    bond_period = models.IntegerField()
+    dateofdrive = models.DateField(null=False, blank=True)
+
+    def __str__(self):
+        return str(str(self.company) + '-' + str(self.drive_year))
+
+    def __unicode__(self):
+        return str(str(self.company) + '-' + str(self.drive_year))
+
+
 class Placements(TimeStampModel):
 
     """
     Placement details of student placed in companies.
     """
 
-    company = models.ForeignKey(Company, db_index=True)
     student = models.ForeignKey(Student, db_index=True)
-    package = models.IntegerField()
-    bond_period = models.IntegerField()
-    dateofplacement = models.DateField(null=False, blank=True)
+    campus_drive = models.ForeignKey(CampusDrive)
     dateofjoining = models.DateField(null=True, blank=True)
 
     def __str__(self):
-        return str(str(self.student) + '-' + str(self.company))
+        return str(str(self.student) + '-' + str(self.campus_drive))
 
     def __unicode__(self):
-        return unicode(str(self.student) + '-' + str(self.company))
+        return unicode(str(self.student) + '-' + str(self.campus_drive))
 
     class Meta:
-        unique_together = ["student", "company"]
+        unique_together = ["student", "campus_drive"]
 
 
 class History(TimeStampModel):

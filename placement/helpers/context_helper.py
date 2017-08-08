@@ -114,3 +114,13 @@ def get_emp_info(employee):
         'photo': os.path.join(settings.MEDIA_URL, employee.photo.name) if employee.photo else None,
     }
     return info
+
+def get_drive_info(drive):
+    info = {
+        'company' : {drive.company.pk: drive.company.name},
+        'package' : drive.package,
+        'bond_period' : drive.bond_period,
+        'dateofdrive' : drive.dateofdrive,
+        'drive_year' : drive.drive_year,
+    }
+    return info

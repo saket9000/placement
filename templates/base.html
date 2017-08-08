@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+
+{% load static %}
+
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -7,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Placement Portal</title>
+    <title>{% block title_block %}Placement Portal{% endblock %}</title>
 
     <!-- Bootstrap -->
     <link href="/static/scss/bootstrap.min.css" rel="stylesheet">
@@ -21,22 +24,12 @@
     <!-- bootstrap-progressbar -->
     <link href="/static/scss/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
-
-
-    <link href="/static/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-    <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-    <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-    <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+    <link href="/static/scss/jqvmap.min.css" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="/static/scss/daterangepicker.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
     <link href="/static/scss/custom.min.css" rel="stylesheet">
-
-    <!-- <link href="/static/scss/prettify.min.css" rel="stylesheet"> -->
-    
-    <link href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 
 
   </head>
@@ -95,10 +88,11 @@
                   </li>
                   <!-- <li><a><i class="fa fa-line-chart"></i> Data Insights <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="/test-search">Test Search</a></li>
+                      <li><a href="/test-seatch">Test Search</a></li>
                       <li><a href="/">Table Dynamic</a></li>
                     </ul>
                   </li> -->
+                  
                   
                 </ul>
               </div>
@@ -110,11 +104,11 @@
         </div>
 
         <!-- top navigation -->
-         <div class="top_nav">
+        <div class="top_nav">
           <div class="nav_menu">
             <nav>
               <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a> 
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
               </div>
 
               <ul class="nav navbar-nav navbar-right">
@@ -136,22 +130,10 @@
         <!-- /top navigation -->
 
         <!-- page content -->
+          
         <div class="right_col" role="main">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>View Students</h3>
-              </div>
-
-              
-              </div>     
-
-
-                    <div id="pagination-div">
-                     {% include "studenttable.html" %}
-                    </div>
-
-
-              </div>
+            {% block main_block %}{% endblock %}
+        </div>
         <!-- /page content -->
 
         <!-- footer content -->
@@ -162,6 +144,8 @@
           <div class="clearfix"></div>
         </footer>
         <!-- /footer content -->
+      </div>
+    </div>
 
     <!-- jQuery -->
     <script src="/static/sjs/jquery.min.js"></script>
@@ -171,25 +155,62 @@
     <script src="/static/sjs/fastclick.js"></script>
     <!-- NProgress -->
     <script src="/static/sjs/nprogress.js"></script>
-    
+    <!-- Chart.js -->
+    <script src="/static/sjs/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="/static/sjs/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="/static/sjs/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="/static/sjs/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="/static/sjs/skycons.js"></script>
+    <!-- Flot -->
+    <script src="/static/sjs/jquery.flot.js"></script>
+    <script src="/static/sjs/jquery.flot.pie.js"></script>
+    <script src="/static/sjs/jquery.flot.time.js"></script>
+    <script src="/static/sjs/jquery.flot.stack.js"></script>
+    <script src="/static/sjs/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="/static/sjs/jquery.flot.orderBars.js"></script>
+    <script src="/static/sjs/jquery.flot.spline.min.js"></script>
+    <script src="/static/sjs/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="/static/sjs/date.js"></script>
+    <!-- JQVMap -->
+    <script src="/static/sjs/jquery.vmap.js"></script>
+    <script src="/static/sjs/jquery.vmap.world.js"></script>
+    <script src="/static/sjs/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="/static/sjs/moment.min.js"></script>
+    <script src="/static/sjs/daterangepicker.js"></script>
+
     <!-- Custom Theme Scripts -->
-    <script src="/static/sjs/custom.min.js"></script>
+    <script src="/static/custom.min.js"></script>
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.0.3/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.0.3/js/buttons.print.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.0.3/js/buttons.flash.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script type="type/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
-    <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.colVis.min.js"></script>
+    <!-- iCheck -->
+    <script src="/static/sjs/icheck.min.js"></script>
+    
+    <!-- bootstrap-wysiwyg -->
+    <script src="/static/sjs/bootstrap-wysiwyg.min.js"></script>
+    <script src="/static/sjs/jquery.hotkeys.js"></script>
+    <script src="/static/sjs/prettify.js"></script>
+    <!-- jQuery Tags Input -->
+    <script src="/static/sjs/jquery.tagsinput.js"></script>
+    <!-- Switchery -->
+    <script src="/static/sjs/switchery.min.js"></script>
+    <!-- Select2 -->
+    <script src="/static/sjs/select2.full.min.js"></script>
+    <!-- Parsley -->
+    <!-- Autosize -->
+    <script src="/static/sjs/autosize.min.js"></script>
+    <!-- jQuery autocomplete -->
+    <script src="/static/sjs/jquery.autocomplete.min.js"></script>
+    <!-- starrr -->
+    <script src="/static/sjs/starrr.js"></script>
+    <!-- Custom Theme Scripts -->
 
-
-
-
+  
+  
   </body>
 </html>
