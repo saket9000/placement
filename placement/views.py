@@ -297,6 +297,13 @@ def add_student(request):
         gtype = request.POST.get('guardian_type_picker')
         gphone = request.POST.get('gphone')
         email = request.POST.get('email')
+        duplicate_student = models.Student.objects.filter(
+            name=sname, dob=dob, guardian_name=gname,
+            guardian_type=gtype, phone=phone, email=email
+        ).first()
+        if duplicate_student:
+            context_dict["message"] = 'Student already exist.'
+            return render(request, "AddStudent.html", context_dict)
         address_flag = request.POST.get('address_flag')
         address_flag = True if address_flag == 'on' else False
         if address_flag == True:
@@ -356,6 +363,13 @@ def add_company(request):
         contact_person = request.POST.get('hr_name')
         c_phone = request.POST.get('c_phone')
         c_email = request.POST.get('c_email')
+        duplicate_company = models.Company.objects.filter(
+            name=cname,address=c_add, phone=c_phone,
+            contact_person=contact_person, email=email
+        ).first()
+        if duplicate_company:
+            context_dict["message"] = 'Company already exists.'
+            return render(request, "AddCompany.html", context_dict)
         try:
             company = models.Company(
                 name=cname,
@@ -699,7 +713,7 @@ def add_placement(request, student_id):
     if not emp.placement_permit:
         raise Http404
     context_dict = {
-        "all_companies" : context_helper.company_select(),
+        "all_drives" : context_helper.drives_info(),
         'student_id': student_id,
     }
     student = models.Student.objects.filter(
@@ -709,20 +723,20 @@ def add_placement(request, student_id):
         raise Http404
     context_dict.update(context_helper.get_student_info(student))
     if request.method == 'POST':
-        company = request.POST.get('company_picker')
-        package = request.POST.get('package')
-        bond = request.POST.get('bond')
-        dop = request.POST.get('dop')
+        drive = request.POST.get('drive_picker')
         doj = request.POST.get('doj')
         if doj == "":
             doj = None
+        duplicate_placement = models.Placements.objects.filter(
+            student=student, campus_drive=models.CampusDrive.objects.get(pk=drive),
+        ).first()
+        if duplicate_placement:
+            context_dict["message"] = 'Placement already exists.'
+            return render(request, "AddPlacement.html", context_dict)
         try:
             placement = models.Placements(
                 student = models.Student.objects.get(pk=student_id),
-                company = models.Company.objects.get(pk=company),
-                package = package,
-                bond_period = bond,
-                dateofplacement = dop,
+                campus_drive = models.CampusDrive.objects.get(pk=drive),
                 dateofjoining = doj,
             )
             placement.save()
@@ -802,49 +816,34 @@ def edit_placement(request, placements_id):
         raise Http404
     context_dict = {
         'placements_id': placements_id,
-        "all_companies": context_helper.company_select()
+        "all_drives": context_helper.drives_info()
     }
     if request.method == 'POST':
         update_fields = []
         activity = ''
-        company = request.POST.get('company_select')
-        package = request.POST.get('package')
-        bond = request.POST.get('bond')
-        dop = request.POST.get('dop')
+        drive = request.POST.get('company_select')
         doj = request.POST.get('doj')
         if doj == "":
             doj = None
         try:
-            if str(placement.company.pk) != str(company):
+            if str(placement.campus_drive.pk) != str(drive):
                 try:
-                    old_company = placement.company
-                    placement.company = models.Company.objects.get(pk=company)
+                    old_drive = placement.campus_drive
+                    placement.campus_drive = models.CampusDrive.objects.get(pk=drive)
                     placement.save()
                 except Exception as e:
                     placement.soft_delete = True
-                    placement.company = old_company
+                    placement.campus_drive = old_drive
                     placement.save()
                     placement = models.Placements.objects.filter(
                         soft_delete=True, student=placement.student,
-                        company__pk=company
+                        campus_drive__pk=drive
                     ).first()
                     placement.soft_delete = False
-                    placement.company = models.Company.objects.get(pk=company)
-                    placement.save(update_fields=['soft_delete', 'company'])
-                update_fields.append('company')
-                activity += 'Changed company to ' + str(company) + '.\n'
-            if placement.package != package:
-                placement.package = package
-                update_fields.append('package')
-                activity += 'Changed package to '+ str(package) +'.\n'
-            if placement.bond_period != bond:
-                placement.bond_period = bond
-                update_fields.append('bond_period')
-                activity += 'Changed bond peroid to '+ str(bond) +'.\n'
-            if placement.dateofplacement != dop:
-                placement.dateofplacement = dop
-                update_fields.append('dateofplacement')
-                activity += 'Changed date of placement to ' + str(dop) + '.\n'
+                    placement.campus_drive = models.CampusDrive.objects.get(pk=drive)
+                    placement.save(update_fields=['soft_delete', 'drive'])
+                update_fields.append('drive')
+                activity += 'Changed drive to ' + str(drive) + '.\n'
             if placement.dateofjoining != doj:
                 placement.dateofjoining = doj
                 update_fields.append('dateofjoining')
@@ -863,8 +862,8 @@ def edit_placement(request, placements_id):
             context_dict["success"] = False
             print(e)
     context_dict.update(context_helper.get_placement_info(placement))
-    for i in context_dict['company']:
-        try: del context_dict['all_companies'][i]
+    for i in context_dict['drive']:
+        try: del context_dict['all_drives'][i]
         except: pass
     if context_dict.get('success', False):
         return HttpResponseRedirect('/view-placements')
@@ -893,6 +892,13 @@ def add_campus_drive(request):
         package = request.POST.get('package')
         bond_period = request.POST.get('bond')
         dateofdrive = request.POST.get('dateofdrive')
+        duplicate_drive = models.CampusDrive.objects.filter(
+            company=models.Company.objects.get(pk=company), package=package,
+            drive_year=drive_year, bond_period=bond_period,
+        ).first()
+        if duplicate_drive:
+            context_dict["message"] = 'Campus Drive already exists.'
+            return render(request, "AddCampusDrive.html", context_dict)
         try:
             drive = models.CampusDrive(
                 company = models.Company.objects.get(pk=company),
@@ -1155,3 +1161,15 @@ def test_search(request):
         )[:20]
         context_dict['rows'] = results
     return render(request, 'test_search.html', context_dict)
+
+
+def year_ajax(request):
+    if request.method=="POST":
+        print(request.POST)
+        year = request.POST.get("year")
+        companies = models.CampusDrive.objects.filter(drive_year=year).values(
+            'company', 'company__name'
+        ).distinct()
+        if 'csrfmiddlewaretoken' not in request.POST:
+            return render(request, 'foo.html', {'companies': companies})
+    return render(request, 'year_ajax_test.html', {})

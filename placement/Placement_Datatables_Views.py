@@ -17,12 +17,12 @@ class PlacementListDatatable(BaseDatatableView):
     model = models.Placements
 
     columns = [
-        'id', 'student.name', 'student.roll_no', 'company.name', 'package',
-        'bond_period','dateofplacement', 'dateofjoining','id', 'id',
+        'id', 'student.name', 'student.roll_no', 'student.batch',
+        'campus_drive.company.name', 'campus_drive.drive_year' 'dateofjoining','id', 'id',
     ]
     order_columns = [
-        'id', 'student.name', 'student.roll_no', 'company.name', 'package',
-        'bond_period','dateofplacement', 'dateofjoining','id', 'id',
+        'id', 'student.name', 'student.roll_no', 'student.batch',
+        'campus_drive.company.name', 'campus_drive.drive_year' 'dateofjoining','id', 'id',
     ]
 
     max_display_length = 500
@@ -47,10 +47,9 @@ class PlacementListDatatable(BaseDatatableView):
                 item.id,
                 item.student.name,
                 item.student.roll_no,
-                item.company.name,
-                item.package,
-                item.bond_period,
-                item.dateofplacement,
+                item.student.batch,
+                item.campus_drive.company.name,
+                item.campus_drive.drive_year,
                 item.dateofjoining,
                 '/edit-placement/'+str(item.pk),
                 '/delete-placement/'+str(item.pk),

@@ -81,20 +81,17 @@ def company_select():
     return {i.pk: i.name for i in company}
 
 
-def company_select_place():
-    company = models.Company.objects.filter(soft_delete=False)
-    return {i.name for i in company}
+def drives_info():
+    drive = models.CampusDrive.objects.filter(soft_delete=False)
+    return {i.pk: i.company for i in drive}
 
 
 def get_placement_info(placement):
     info = {
         'sname': placement.student.name,
         'rollno': placement.student.roll_no,
-        'company': {placement.company.pk: placement.company.name},
-        'package': placement.package,
-        'bond': placement.bond_period,
         'batch': placement.student.batch,
-        'dop': placement.dateofplacement,
+        'drive': {placement.campus_drive.pk: placement.campus_drive.company},
         'doj': placement.dateofjoining,
     }
     return info

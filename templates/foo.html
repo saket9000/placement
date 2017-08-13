@@ -1,0 +1,5 @@
+<select name="company" id="companies">
+    {% for i in companies %}
+        <option value="{{ i.company }}">{{ i.company__name }}</option>
+    {% endfor %}
+</select>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YEAR AJAX TEST</title>
+</head>
+<body>
+    <form action="/year-ajax" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <select id="year" name="year">
+            <option value="2016">2016</option>
+            <option value="2016">2014</option>
+        </select>
+        <div id="company-div"></div>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+    <!-- jQuery -->
+    <script src="/static/sjs/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/year_ajax.js"></script>
+</body>
+</html>

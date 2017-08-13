@@ -31,7 +31,6 @@ urlpatterns = [
         name='view-placements-dt'),
     url(r'^delete-placement/(?P<placements_id>[0-9]+)$', views.delete_placement, name='delete_placement'),
     url(r'^edit-placement/(?P<placements_id>[0-9]+)$', views.edit_placement, name='edit_placement'),
-    # url(r'^srch', views.search, name='srch'),
     url(r'^bcharts$', views.bar_chart, name='bcharts'),
     url(r'^pcharts$', views.pie_chart, name='pcharts'),
     url(r'^cpassword$', views.change_password, name='cpassword'),
@@ -45,4 +44,5 @@ urlpatterns = [
     url(r'^view-drive-dt/$', login_required(drive_datatables_views.DriveListDatatable.as_view()), 
         name='view-drive-dt'),
     url(r'^delete-drive/(?P<campusdrive_id>[0-9]+)$', views.delete_campus_drive, name='delete-drive'),
+    url(r'^year-ajax$', views.year_ajax, name='year_ajax'),
 ]
