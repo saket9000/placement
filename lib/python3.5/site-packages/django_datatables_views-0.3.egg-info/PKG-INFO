@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: django-datatables-views
+Version: 0.3
+Summary: CBV to create fast table views based on datatables.js
+Home-page: https://github.com/a1fred/django-datatables-views
+Author: a1fred
+Author-email: demalf@gmail.com
+License: MIT
+Description: UNKNOWN
+Platform: any

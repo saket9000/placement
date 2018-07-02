@@ -49,6 +49,7 @@ class Person(TimeStampModel):
     address_flag = models.BooleanField(default=False)
     photo = models.ImageField(upload_to='profile-images', null=True)
     blood_group = models.CharField(max_length=3, null=True, choices=BLOOD_TYPE, blank=True)
+    celery_schedule = models.IntegerField(default=0)
 
     class Meta:
         abstract = True
@@ -87,7 +88,7 @@ class Student(Person):
     guardian_name = models.CharField(max_length=50)
     guardian_type = models.CharField(max_length=1, choices=GUARDIAN_TYPE)
     guardian_phone = models.CharField(max_length=15)
-    course = models.ForeignKey(Course, db_index=True)
+    course = models.ForeignKey(Course, db_index=True, on_delete=models.CASCADE)
     batch = models.IntegerField()
     email = models.CharField(max_length=100, null=False, unique=True)
 
@@ -104,7 +105,7 @@ class Employee(Person):
     Employee details and their rights to portal.
     """
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     e_id = models.CharField(max_length=20, db_index=True, unique=True)
     student_permit = models.BooleanField(default=False)
     company_permit = models.BooleanField(default=False)
@@ -142,7 +143,7 @@ class CampusDrive(TimeStampModel):
     Campus drive details of every company year by year.
     """
 
-    company = models.ForeignKey(Company, db_index=True)
+    company = models.ForeignKey(Company, db_index=True, on_delete=models.CASCADE)
     drive_year = models.IntegerField()
     package = models.CharField(max_length=10, db_index=True)
     bond_period = models.IntegerField()
@@ -161,8 +162,8 @@ class Placements(TimeStampModel):
     Placement details of student placed in companies.
     """
 
-    student = models.ForeignKey(Student, db_index=True)
-    campus_drive = models.ForeignKey(CampusDrive)
+    student = models.ForeignKey(Student, db_index=True, on_delete=models.CASCADE)
+    campus_drive = models.ForeignKey(CampusDrive, on_delete=models.CASCADE)
     dateofjoining = models.DateField(null=True, blank=True)
 
     def __str__(self):
@@ -181,7 +182,7 @@ class History(TimeStampModel):
     Record of changes that is made by the user.
     """
 
-    user = models.ForeignKey(Employee)
+    user = models.ForeignKey(Employee, on_delete=models.CASCADE)
     activity = models.TextField(null=True, blank=True)
     activity_type = models.CharField(max_length=50)
 
@@ -198,7 +199,7 @@ class PasswordReset(TimeStampModel):
     Password reset model.
     """
 
-    user = models.ForeignKey(Employee)
+    user = models.ForeignKey(Employee, on_delete=models.CASCADE)
     password_request_created_at = models.DateTimeField(auto_now_add=True)
     token = models.TextField()
     token_consumed = models.BooleanField(default=False)

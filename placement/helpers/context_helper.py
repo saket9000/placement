@@ -81,6 +81,11 @@ def company_select():
     return {i.pk: i.name for i in company}
 
 
+def drive_year_info():
+    dyears = models.CampusDrive.objects.filter(soft_delete=False)
+    return dyears
+
+
 def drives_info():
     drive = models.CampusDrive.objects.filter(soft_delete=False)
     return {i.pk: i.company for i in drive}

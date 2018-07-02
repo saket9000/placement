@@ -37,7 +37,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-home"></i> <span>Placement Portal</span></a>
+              <a href="/home" class="site_title"><i class="fa fa-home"></i> <span>Placement Portal</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -75,6 +75,14 @@
                       <li><a href="form_wizards.html">Delete Company</a></li> -->
                     </ul>
                   </li>
+
+                  <li><a><i class="fa fa-paper-plane-o"></i> Campus Drive <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="/add-drive">Add Drive</a></li>
+                      <li><a href="/view-drives">View Drive</a></li>
+                    </ul>
+                  </li>
+
                   <li><a><i class="fa fa-graduation-cap"></i> Placements <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="/view-students">Add Placement</a></li>
@@ -192,9 +200,34 @@
                           <input class="form-control col-md-7 col-xs-12" required="required" type="text" name="batch" value="{{batch}}" readonly>
                         </div>
                       </div>
-
-
                       
+
+
+<!-- 
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Drive Year<span class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input class="form-control col-md-7 col-xs-12" required="required" type="text" name="dyears" value="{{dyears}}" readonly>
+                        </div>
+                      </div> -->
+
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Drive Year<span class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select class="form-control" name="dyears" data-show-subtext="true" data-live-search>
+                            <option>Choose option</option>
+                            {% for value in dyears %}
+                            <option value="{{ val }}"> {{ value }} </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+
+
+
+
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Drive<span class="required">*</span></label>

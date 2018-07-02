@@ -16,10 +16,8 @@ from placement.helpers import context_helper
 from django.template.context import RequestContext
 from django.contrib.auth.models import User
 from django.db.models import Q
-from rest_framework import serializers
 from django.core import serializers
 import json
-from highcharts.views import *
 from django.db.models.query_utils import Q
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -37,8 +35,17 @@ from datetime import datetime, timedelta
 import hashlib
 import random
 
+from .forms import AddForm
+
+
 
 # Create your views here.
+
+def mypage(request):
+    form = AddForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+    return render(request, "add.html", {'form':form})
 
 
 def handler404(request):
@@ -303,6 +310,8 @@ def add_student(request):
         ).first()
         if duplicate_student:
             context_dict["message"] = 'Student already exist.'
+            duplicate_student.soft_delete=False
+            duplicate_student.save()
             return render(request, "AddStudent.html", context_dict)
         address_flag = request.POST.get('address_flag')
         address_flag = True if address_flag == 'on' else False
@@ -365,10 +374,12 @@ def add_company(request):
         c_email = request.POST.get('c_email')
         duplicate_company = models.Company.objects.filter(
             name=cname,address=c_add, phone=c_phone,
-            contact_person=contact_person, email=email
+            contact_person=contact_person, email=c_email,
         ).first()
         if duplicate_company:
             context_dict["message"] = 'Company already exists.'
+            duplicate_company.soft_delete=False
+            duplicate_company.save()
             return render(request, "AddCompany.html", context_dict)
         try:
             company = models.Company(
@@ -712,8 +723,15 @@ def add_placement(request, student_id):
     emp = models.Employee.objects.get(user=request.user)
     if not emp.placement_permit:
         raise Http404
+    dyears = models.CampusDrive.objects.filter(soft_delete=False).values(
+        'drive_year'
+    ).distinct()
+    print (dyears)
+    x = [i['drive_year'] for i in dyears]
+    print (x)
     context_dict = {
         "all_drives" : context_helper.drives_info(),
+        "dyears": x,
         'student_id': student_id,
     }
     student = models.Student.objects.filter(
@@ -732,6 +750,8 @@ def add_placement(request, student_id):
         ).first()
         if duplicate_placement:
             context_dict["message"] = 'Placement already exists.'
+            duplicate_placement.soft_delete = False
+            duplicate_placement.save()
             return render(request, "AddPlacement.html", context_dict)
         try:
             placement = models.Placements(
@@ -898,6 +918,8 @@ def add_campus_drive(request):
         ).first()
         if duplicate_drive:
             context_dict["message"] = 'Campus Drive already exists.'
+            duplicate_drive.soft_delete=False
+            duplicate_drive.save()
             return render(request, "AddCampusDrive.html", context_dict)
         try:
             drive = models.CampusDrive(
@@ -1027,6 +1049,7 @@ def view_campus_drive(request):
         'ViewCampusDrive.html',
         context_dict
     )
+    # celery_test_task.delay(5,5)
 
 
 @login_required

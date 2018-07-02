@@ -45,4 +45,6 @@ urlpatterns = [
         name='view-drive-dt'),
     url(r'^delete-drive/(?P<campusdrive_id>[0-9]+)$', views.delete_campus_drive, name='delete-drive'),
     url(r'^year-ajax$', views.year_ajax, name='year_ajax'),
+
+    url(r'^my-page$', views.mypage, name='my-page'),
 ]

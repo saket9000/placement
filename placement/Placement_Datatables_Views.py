@@ -30,15 +30,17 @@ class PlacementListDatatable(BaseDatatableView):
     def get_initial_queryset(self):
         return models.Placements.objects.filter(soft_delete=False).order_by('-id')
 
-    """def filter_queryset(self, qs):
+    def filter_queryset(self, qs):
         search = self.request.GET.get(u'search[value]', None)
         if search:
             qs = qs.filter(
-                Q(name__icontains=search) | Q(roll_no__icontains=search) | 
-                Q(name__icontains=search) | Q(package__icontains=search) |
-                Q(bond_period__icontains=search)
+                Q(id__icontains=search) | Q(student__name__icontains=search) | 
+                Q(student__roll_no__icontains=search) | Q(student__batch__icontains=search) |
+                Q(campus_drive__company__name__icontains=search) | 
+		Q(campus_drive__drive_year__icontains=search) |
+		Q(dateofjoining__icontains=search)
             )
-        return qs"""
+        return qs
 
     def prepare_results(self, qs):
         data = []
