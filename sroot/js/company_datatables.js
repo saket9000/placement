@@ -1,7 +1,35 @@
 $(document).ready(function company_table() {
     var table = $('#company-table').DataTable({
         // ...
-
+        "dom": '<"top"lBf>rt<"bottom"ip><"clear">',
+        buttons: [
+            {
+                extend: 'copy',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'excel',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdf',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            
+            'colvis'
+        ],
         "processing": true,
         "serverSide": true,
         "ajax": {
@@ -32,6 +60,7 @@ $(document).ready(function company_table() {
                             }
                         }
                     ]
+        
         // ...
         });
     });

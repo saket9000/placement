@@ -134,8 +134,8 @@ def login_view(request):
     """
     Login view imported from templates.
     """
-    if request.user.is_authenticated():
-        return HttpResponseRedirect('/home')
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('home')
     next_url = request.GET.get('next', '/home')
     if request.method == "POST":
         username = request.POST.get('username')
