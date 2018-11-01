@@ -1,0 +1,24 @@
+<!doctype html>
+<html> 
+    <head>
+        <link rel="stylesheet" href="/static/css/AddCompany.css" />
+        <title>Placement Portal</title>
+    </head>
+    
+    <body> 
+        <div><p id="head">Add Company</p></div>
+        <p> Enter Details of Company </p>
+        <form action="/add-company" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <ul>
+            <input placeholder="Company Name" type="text" name="c_name">
+            <input placeholder="Address" type="text" name="c_address">
+            <input placeholder="Contact Person" type="text" name="hr_name">
+            <input placeholder="phone" type="text" name="c_phone">
+            <input placeholder="email" type="text" name="c_email">
+            <input type="submit">
+            {{ message }}
+         </ul>
+            </form>
+    </body>
+</html>

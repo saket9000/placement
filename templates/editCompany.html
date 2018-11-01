@@ -1,0 +1,21 @@
+<!doctype html>
+<html> 
+    <head> 
+        <link rel="stylesheet" href="/static/css/editCompany.css" />
+        <title>Placement Portal</title>
+    </head>
+    
+    <body><div><p id="head">Edit Company</p></div>
+        <p> Enter Details of company </p>
+        <form action="/edit-company/{{company_id}}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            <input placeholder="Company Name" type="text" name="c_name" value="{{c_name}}">
+            <input placeholder="Address" type="text" name="c_address" value="{{c_add}}">
+            <input placeholder="phone" type="text" name="c_phone" value="{{c_phone}}">
+            <input placeholder="Contact Person" type="text" name="hr_name" value="{{hr_name}}">
+            <input placeholder="Email address" type="text" name="c_email" value="{{c_email}}">
+            
+            <input type="submit">
+            </form>
+    </body>
+</html>

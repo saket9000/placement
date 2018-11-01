@@ -1,0 +1,13 @@
+body{
+	margin: 0;
+}
+
+#head{
+	font-family: arial, helvetica, sans-serif;
+	font-size: 25px;
+	text-align: center;
+	background: red;
+	padding: 1em;
+	margin: 0;
+}
+

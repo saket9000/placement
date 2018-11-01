@@ -1,0 +1,67 @@
+<!doctype html>
+<html> 
+    <head> 
+        <link rel="stylesheet" href="/static/css/addStudent.css" />
+        <title>Placement Portal</title>
+    </head>
+    
+    <body><div><p id="head">Edit Student</p></div>
+        <p> Enter Details of Student </p>
+        <form action="/edit-student/{{student_id}}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            <input placeholder="Name" type="text" name="sname" value="{{sname}}">
+            <input placeholder="Roll Number" type="text" name="rno" value="{{roll}}">
+            <input placeholder="DOB" type="date" name="dob" value="{{dob|date:"Y-m-d"}}">
+
+            <select name="blood_group_picker">
+                <option value="">Please select</option>
+                {% for i in blood_group %}
+                    <option value="{{ i.0 }}" selected>{{ i.1 }}</option>
+                {% endfor %}
+                {% for i in blood_groups %}
+                    <option value="{{ i.0 }}">{{ i.1 }}</option>
+                {% endfor %}
+            </select>
+
+
+            <input placeholder="phone" type="text" name="phone" value="{{phone}}">
+            <input placeholder="Current address" type="text" name="curradd" value="{{curradd}}">
+            <input placeholder="Permanent address" type="text" name="permadd" value="{{permadd}}">
+            {% if address_flag %}
+                <input type="checkbox" value="yes" name="address_flag" checked>Same as current address</input>
+            {% else %}
+                <input type="checkbox" value="yes" name="address_flag">Same as current address</input>
+            {% endif %}
+            <input placeholder="photo" type="file" accept="image/*" name="profile-img">
+            {% if photo %}
+                <a href="{{ photo }}" target="_blank">View</a>
+            {% endif %}
+            <input placeholder="Guardian's Name" type="text" name="gname" value="{{gname}}">
+            
+            <select name="course_picker">
+                {% for key,value in course.items %}
+                    <option value="{{ key }}" selected>{{ value }}</option>
+                {% endfor %}
+                {% for key,value in all_courses.items %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+
+            <input placeholder="batch" type="text" name="batch" value="{{batch}}">
+            <select name="guardian_type_picker">
+                {% for key in guardian_type %}
+                    <option value="{{key.0}}">{{key.1}}</option>
+                {% endfor %}
+                {% for key in guardian_types %}
+                    <option value="{{key.0}}">{{key.1}}</option>
+                {% endfor %}
+            </select>
+
+
+            <!-- <input placeholder="Guardian type" type="text" name="gtype"> -->
+            <input placeholder="Guardian phone" type="text" name="gphone" value="{{guardian_phone}}">
+            <input placeholder="email" type="text" name="email" value="{{email}}">
+            <input type="submit">
+            </form>
+    </body>
+</html>
