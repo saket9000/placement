@@ -1,6 +1,6 @@
 amqp==2.3.2
 billiard==3.5.0.4
-celery==4.2.1
+celery==5.2.2
 datatables==0.4.9
 Django==1.11.29
 django-datatables-view==1.17.0
