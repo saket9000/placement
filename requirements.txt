@@ -11,5 +11,5 @@ Pillow==6.2.0
 pkg-resources==0.0.0
 python-decouple==3.1
 pytz==2018.7
-setuptools==40.5.0
+setuptools==65.5.1
 vine==1.1.4
